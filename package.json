@@ -1,0 +1,26 @@
+{
+  "name": "learning-three",
+  "version": "1.0.0",
+  "description": "Here I will learn Three.js and other interesting stuff",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shikitos/Learning-Three.js.git"
+  },
+  "keywords": [
+    "three.js",
+    "javascript"
+  ],
+  "author": "Nikita Shitov <shitovn16@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shikitos/Learning-Three.js/issues"
+  },
+  "homepage": "https://github.com/shikitos/Learning-Three.js#readme",
+  "dependencies": {
+    "sass": "^1.26.10"
+  }
+}
