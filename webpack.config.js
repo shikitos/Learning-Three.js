@@ -22,6 +22,7 @@ const optimization = () => {
     return config
 }
 
+// noinspection WebpackConfigHighlighting
 module.exports = {
     context: path.resolve(__dirname, 'src'),
     mode: 'development',
@@ -34,6 +35,7 @@ module.exports = {
         path: path.resolve(__dirname, 'dist')
     },
     optimization: optimization(),
+    devtool: isDevMode ? 'source-map' : '',
     plugins: [
         new HTMLWebpackPlugin({
             template: './index.html',
