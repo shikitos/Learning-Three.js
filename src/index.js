@@ -26,26 +26,42 @@ function sceneOnLoad() {
         camera.updateProjectionMatrix();
     });
 
+    let raycaster = new THREE.Raycaster();
+    let mouse = new THREE.Vector2();
+
     //create new object - sphere
     let geometry = new THREE.BoxGeometry(1, 1, 1);
     //add material for the sphere
-    let material = new THREE.MeshLambertMaterial({color: 0xFFCC00});
+    let material = new THREE.MeshLambertMaterial({color: 0xF7F7F7});
     //combine geometry + material = figure
-    let mesh = new THREE.Mesh(geometry, material);
-
-    mesh.position.set(2, 2, -2);
-
-
+    // let mesh = new THREE.Mesh(geometry, material);
     //add it at the scene
-    scene.add(mesh);
+    // scene.add(mesh);
+    //create new object - sphere
+    let meshX;
+    meshX = -10;
+    for ( let i = 0; i < 25; i++ ) {
+        let mesh = new THREE.Mesh(geometry, material);
+        mesh.position.x += (Math.random() - 0.5) * 10;
+        mesh.position.y += (Math.random() - 0.5) * 10;
+        mesh.position.z += (Math.random() - 0.5) * 10;
+        scene.add(mesh);
+        meshX += 1;
+    }
     /*
     * As we can see - our figure is black
     * cuz we need light
     * and we create it
      */
-    let light = new THREE.PointLight(0xFFFFFF, 1, 500);
+    let light = new THREE.PointLight(0xFFFFFF, 1, 1000);
     //put light into (10, 0, 25) position
-    light.position.set(10, 0, 25);
+    light.position.set(0, 0, 0);
+    //add light at the scene
+    scene.add(light);
+    //second light
+    light = new THREE.PointLight(0xFFFFFF, 2, 1000);
+    //put light into (10, 0, 25) position
+    light.position.set(0, 0, 25);
     //add light at the scene
     scene.add(light);
 
@@ -53,18 +69,34 @@ function sceneOnLoad() {
     let render = function() {
         //loop which as page resize or refresh — rerender the scene
         requestAnimationFrame(render);
-        mesh.rotation.x += 0.01;
-        mesh.rotation.y += 0.01;
+        // mesh.rotation.x += 0.01;
+        // mesh.rotation.y += 0.01;
         renderer.render(scene, camera);
     }
+
     render();
 
-    this.tl = new TimelineMax().delay(0.3);
-    this.tl.to(this.mesh.scale, 1, {x: 2, ease: Expo.easeOut});
-    this.tl.to(this.mesh.scale, 0.5, {x: 0.5, ease: Expo.easeOut});
-    this.tl.to(this.mesh.position, 0.5, {x: 2, ease: Expo.easeOut});
-    this.tl.to(this.mesh.rotation, 0.5, {y: Math.PI*0.5, ease: Expo.easeOut}, '=-1.5');
 
+    function onMouseMove(event) {
+
+        event.preventDefault();
+
+        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+
+        raycaster.setFromCamera(mouse, camera);
+
+        let intersects = raycaster.intersectObjects(scene.children, true);
+        for (let i = 0; i < intersects.length; i++) {
+            let tl = gsap.timeline();
+            tl.to(intersects[i].object.scale, {x: 2, duration: 1, ease: 'easeOut'});
+            tl.to(intersects[i].object.scale, {x: 0.5, duration: 1, ease: 'easeOut'});
+            tl.to(intersects[i].object.position, {x: 2, duration: 1, ease: 'easeOut'});
+            tl.to(intersects[i].object.rotation, {y: Math.PI*0.5, duration: 1, ease: 'easeOut'}, '=-1.5');
+        }
+    }
+
+    window.addEventListener('mousemove', onMouseMove);
 
 }
 
